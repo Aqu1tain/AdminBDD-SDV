@@ -4,15 +4,16 @@ from pymongo.errors import ConnectionFailure, OperationFailure
 
 def connect_to_db():
     try:
-        client = MongoClient("mongodb://localhost:27017/", serverSelectionTimeoutMS=5000)
-        client.admin.command("ping")
+        client = MongoClient("mongodb://localhost:27017/")
+        client.admin.command("ping") # To check if connection is gud, can raise ConnectionFailure
         db = client["game_db"]
-        print("Connected to MongoDB")
+
+        # print("Connected to MongoDB")
         return db
+
     except ConnectionFailure:
         print("Failed to connect to MongoDB.")
         return None
-
 
 def get_characters_data():
     return [
@@ -28,7 +29,6 @@ def get_characters_data():
         {"name": "Chasseur", "attack": 16, "defense": 11, "hp": 100},
     ]
 
-
 def get_monsters_data():
     return [
         {"name": "Gobelin", "attack": 10, "defense": 5, "hp": 50},
@@ -43,16 +43,15 @@ def get_monsters_data():
         {"name": "Squelette", "attack": 15, "defense": 7, "hp": 90},
     ]
 
-
 def insert_characters(db):
     try:
-        db.characters.drop()
+        db.characters.drop() # We reset all changes
         characters = get_characters_data()
         db.characters.insert_many(characters)
         print(f"Inserted {len(characters)} characters")
+
     except OperationFailure as e:
         raise Exception(f"Failed to insert characters: {e}")
-
 
 def insert_monsters(db):
     try:
@@ -60,18 +59,17 @@ def insert_monsters(db):
         monsters = get_monsters_data()
         db.monsters.insert_many(monsters)
         print(f"Inserted {len(monsters)} monsters")
+
     except OperationFailure as e:
         raise Exception(f"Failed to insert monsters: {e}")
 
-
 def init_leaderboard(db):
     try:
-        db.leaderboard.drop()
+        db.leaderboard.drop() # TODO : find a way to keep Leaderboard across games, but optional
         db.create_collection("leaderboard")
         print("Initialized leaderboard")
     except OperationFailure as e:
         raise Exception(f"Failed to initialize leaderboard: {e}")
-
 
 def init_database():
     db = connect_to_db()
@@ -83,15 +81,8 @@ def init_database():
         insert_characters(db)
         insert_monsters(db)
         init_leaderboard(db)
-        return True
+        return db
+
     except Exception as e:
         print(e)
         return False
-
-
-if __name__ == "__main__":
-    print("Initializing game database...")
-    if init_database():
-        print("\nDatabase initialization complete!")
-    else:
-        print("\nDatabase initialization failed")
