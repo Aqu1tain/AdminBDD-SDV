@@ -50,10 +50,8 @@ def insert_characters(db):
         characters = get_characters_data()
         db.characters.insert_many(characters)
         print(f"✓ Inserted {len(characters)} characters")
-        return True
     except OperationFailure as e:
-        print(f"✗ Failed to insert characters: {e}")
-        return False
+        raise Exception(f"Failed to insert characters: {e}")
 
 
 def insert_monsters(db):
@@ -62,10 +60,8 @@ def insert_monsters(db):
         monsters = get_monsters_data()
         db.monsters.insert_many(monsters)
         print(f"✓ Inserted {len(monsters)} monsters")
-        return True
     except OperationFailure as e:
-        print(f"✗ Failed to insert monsters: {e}")
-        return False
+        raise Exception(f"Failed to insert monsters: {e}")
 
 
 def init_leaderboard(db):
@@ -73,10 +69,8 @@ def init_leaderboard(db):
         db.leaderboard.drop()
         db.create_collection("leaderboard")
         print("✓ Initialized leaderboard")
-        return True
     except OperationFailure as e:
-        print(f"✗ Failed to initialize leaderboard: {e}")
-        return False
+        raise Exception(f"Failed to initialize leaderboard: {e}")
 
 
 def init_database():
@@ -84,13 +78,14 @@ def init_database():
     if db is None:
         return False
 
-    success = all([
-        insert_characters(db),
-        insert_monsters(db),
+    try:
+        insert_characters(db)
+        insert_monsters(db)
         init_leaderboard(db)
-    ])
-
-    return success
+        return True
+    except Exception as e:
+        print(f"✗ {e}")
+        return False
 
 
 if __name__ == "__main__":
