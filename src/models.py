@@ -23,12 +23,13 @@ class Entity:
             "max_hp": self.max_hp,
             "attack": self.attack,
             "defense": self.defense
-        }
+        } # Accessible via entity.get_stats()['name']
 
-
+# Custom classes to separate Characters from Monsters
+# In the future, there may be custom methods depending on the class
+# But for now they are strictly the same.
 class Character(Entity):
     pass
-
 
 class Monster(Entity):
     pass
