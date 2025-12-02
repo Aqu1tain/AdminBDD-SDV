@@ -7,10 +7,10 @@ def connect_to_db():
         client = MongoClient("mongodb://localhost:27017/", serverSelectionTimeoutMS=5000)
         client.admin.command("ping")
         db = client["game_db"]
-        print("✓ Connected to MongoDB")
+        print("Connected to MongoDB")
         return db
     except ConnectionFailure:
-        print("✗ Failed to connect to MongoDB. Is it running?")
+        print("Failed to connect to MongoDB.")
         return None
 
 
@@ -49,7 +49,7 @@ def insert_characters(db):
         db.characters.drop()
         characters = get_characters_data()
         db.characters.insert_many(characters)
-        print(f"✓ Inserted {len(characters)} characters")
+        print(f"Inserted {len(characters)} characters")
     except OperationFailure as e:
         raise Exception(f"Failed to insert characters: {e}")
 
@@ -59,7 +59,7 @@ def insert_monsters(db):
         db.monsters.drop()
         monsters = get_monsters_data()
         db.monsters.insert_many(monsters)
-        print(f"✓ Inserted {len(monsters)} monsters")
+        print(f"Inserted {len(monsters)} monsters")
     except OperationFailure as e:
         raise Exception(f"Failed to insert monsters: {e}")
 
@@ -68,13 +68,14 @@ def init_leaderboard(db):
     try:
         db.leaderboard.drop()
         db.create_collection("leaderboard")
-        print("✓ Initialized leaderboard")
+        print("Initialized leaderboard")
     except OperationFailure as e:
         raise Exception(f"Failed to initialize leaderboard: {e}")
 
 
 def init_database():
     db = connect_to_db()
+
     if db is None:
         return False
 
@@ -84,13 +85,13 @@ def init_database():
         init_leaderboard(db)
         return True
     except Exception as e:
-        print(f"✗ {e}")
+        print(e)
         return False
 
 
 if __name__ == "__main__":
     print("Initializing game database...")
     if init_database():
-        print("\n✓ Database initialization complete!")
+        print("\nDatabase initialization complete!")
     else:
-        print("\n✗ Database initialization failed")
+        print("\nDatabase initialization failed")
