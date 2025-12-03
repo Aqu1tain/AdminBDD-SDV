@@ -17,16 +17,16 @@ def connect_to_db():
 
 def get_characters_data():
     return [
-        {"name": "Guerrier", "attack": 15, "defense": 10, "hp": 100},
-        {"name": "Mage", "attack": 20, "defense": 5, "hp": 80},
-        {"name": "Archer", "attack": 18, "defense": 7, "hp": 90},
-        {"name": "Voleur", "attack": 22, "defense": 8, "hp": 85},
-        {"name": "Paladin", "attack": 14, "defense": 12, "hp": 110},
-        {"name": "Sorcier", "attack": 25, "defense": 3, "hp": 70},
-        {"name": "Chevalier", "attack": 17, "defense": 15, "hp": 120},
-        {"name": "Moine", "attack": 19, "defense": 9, "hp": 95},
-        {"name": "Berserker", "attack": 23, "defense": 6, "hp": 105},
-        {"name": "Chasseur", "attack": 16, "defense": 11, "hp": 100},
+        {"name": "Guerrier", "attack": 15, "defense": 10, "hp": 100, "critical_chance": 20},
+        {"name": "Mage", "attack": 20, "defense": 5, "hp": 80, "critical_chance": 10},
+        {"name": "Archer", "attack": 18, "defense": 7, "hp": 90, "critical_chance": 25},
+        {"name": "Voleur", "attack": 22, "defense": 8, "hp": 85, "critical_chance": 30},
+        {"name": "Paladin", "attack": 14, "defense": 12, "hp": 110, "critical_chance": 15},
+        {"name": "Sorcier", "attack": 25, "defense": 3, "hp": 70, "critical_chance": 12},
+        {"name": "Chevalier", "attack": 17, "defense": 15, "hp": 120, "critical_chance": 18},
+        {"name": "Moine", "attack": 19, "defense": 9, "hp": 95, "critical_chance": 22},
+        {"name": "Berserker", "attack": 23, "defense": 6, "hp": 105, "critical_chance": 35},
+        {"name": "Chasseur", "attack": 16, "defense": 11, "hp": 100, "critical_chance": 28},
     ]
 
 def get_monsters_data():

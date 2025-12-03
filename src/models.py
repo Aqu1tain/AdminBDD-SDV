@@ -1,10 +1,13 @@
+import random
+
 class Entity:
-    def __init__(self, name, attack, defense, hp):
+    def __init__(self, name, attack, defense, hp, critical_chance=0):
         self.name = name
         self.attack = attack
         self.defense = defense
         self.max_hp = hp
         self.current_hp = hp
+        self.critical_chance = critical_chance
 
     @classmethod
     def from_db(cls, data):
@@ -12,7 +15,8 @@ class Entity:
             data['name'],
             data['attack'],
             data['defense'],
-            data['hp']
+            data['hp'],
+            data.get('critical_chance', 0)
         )
 
     def is_alive(self):
@@ -23,7 +27,14 @@ class Entity:
         self.current_hp = max(0, self.current_hp - actual_damage)
 
     def attack_target(self, target):
-        target.take_damage(self.attack)
+        damage = self.attack
+        is_crit = random.randint(1, 100) <= self.critical_chance
+
+        if is_crit:
+            damage *= 2
+
+        target.take_damage(damage)
+        return is_crit
 
     def get_stats(self):
         return {

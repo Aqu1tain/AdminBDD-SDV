@@ -8,8 +8,9 @@ def print_monster_status(monster):
 def team_attacks_monster(team, monster):
     for c in team:
         if c.is_alive():
-            print(f"{c.name} : {c.current_hp}/{c.max_hp} attaque {monster.name}")
-            c.attack_target(monster)
+            is_crit = c.attack_target(monster)
+            crit_text = " COUP CRITIQUE!" if is_crit else ""
+            print(f"{c.name} : {c.current_hp}/{c.max_hp} attaque {monster.name}{crit_text}")
 
 def print_team_status(team):
     print("\nÉtat de l'équipe:")
@@ -36,8 +37,9 @@ def combat_turn(team : list[Character], monster : Monster):
 
 def monster_fight_character(monster : Monster, team : list[Character]):
     c = random.choice(team)
-    print(f"Monstre : {monster.name} attaque {c.name} ({c.current_hp}/{c.max_hp} points de vie)")
-    monster.attack_target(c)
+    is_crit = monster.attack_target(c)
+    crit_text = " COUP CRITIQUE!" if is_crit else ""
+    print(f"Monstre : {monster.name} attaque {c.name} ({c.current_hp}/{c.max_hp} points de vie){crit_text}")
     return c
 
 def is_team_alive(team):
