@@ -65,9 +65,11 @@ def insert_monsters(db):
 
 def init_leaderboard(db):
     try:
-        db.leaderboard.drop() # TODO : find a way to keep Leaderboard across games, but optional
-        db.create_collection("leaderboard")
-        print("Initialized leaderboard")
+        if "leaderboard" not in db.list_collection_names():
+            db.create_collection("leaderboard")
+            print("Initialized leaderboard")
+        else:
+            print("Leaderboard already exists")
     except OperationFailure as e:
         raise Exception(f"Failed to initialize leaderboard: {e}")
 
