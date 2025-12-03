@@ -1,4 +1,4 @@
-from db_init import connect_to_db, init_database
+from db_init import init_database
 from utils import get_all_characters, save_score, get_top_scores
 from game import start_combat
 
