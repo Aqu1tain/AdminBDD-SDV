@@ -10,7 +10,7 @@ class Entity:
         return self.current_hp > 0
 
     def take_damage(self, damage):
-        actual_damage = max(0, damage - self.defense)
+        actual_damage = max(0, damage - self.defense / 2)
         self.current_hp = max(0, self.current_hp - actual_damage)
 
     def attack_target(self, target):
