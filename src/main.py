@@ -1,5 +1,6 @@
 from db_init import connect_to_db, init_database
 from utils import get_all_characters, save_score, get_top_scores
+from game import start_combat
 
 def show_main_menu():
     print("")
@@ -62,9 +63,7 @@ def start_game(db):
     for char in team:
         print(f"- {char.name}")
 
-    print("\nCombat a implémenter")
-    score = 0 # TODO : Ajouter la phase de combats
-
+    score = start_combat(team, db)
     save_score(db, username, score)
 
 def main():
