@@ -32,19 +32,25 @@ def monster_fight_character(monster : Monster, team : list[Character]):
     monster.attack_target(c)
     return c
 
+def is_team_alive(team):
+    return any(char.is_alive() for char in team)
+
+def fight_monster(team, monster):
+    while monster.is_alive() and is_team_alive(team):
+        if combat_turn(team, monster):
+            break
+
+    return is_team_alive(team)
+
 def start_combat(team : list[Character], db):
     wave = 0
 
-    while any(char.is_alive() for char in team):
+    while is_team_alive(team):
         wave += 1
         monster = get_random_monster(db)
         print(f"\nVague {wave} - {monster.name} apparait!")
 
-        while monster.is_alive() and any(char.is_alive() for char in team):
-            if combat_turn(team, monster):
-                break
-
-        if not any(char.is_alive() for char in team):
+        if not fight_monster(team, monster):
             break
 
     return wave - 1 if wave > 0 else 0
