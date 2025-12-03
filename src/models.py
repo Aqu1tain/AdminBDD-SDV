@@ -6,6 +6,15 @@ class Entity:
         self.max_hp = hp
         self.current_hp = hp
 
+    @classmethod
+    def from_db(cls, data):
+        return cls(
+            data['name'],
+            data['attack'],
+            data['defense'],
+            data['hp']
+        )
+
     def is_alive(self):
         return self.current_hp > 0
 
