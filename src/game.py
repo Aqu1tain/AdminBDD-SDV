@@ -2,14 +2,26 @@ from models import Monster, Character
 from utils import get_random_monster
 import random
 
-def combat_turn(team : list[Character], monster : Monster):
-    print("\nTour de combat")
+def print_monster_status(monster):
     print(f"Monstre: {monster.name} ({monster.current_hp}/{monster.max_hp} points de vie)")
 
+def team_attacks_monster(team, monster):
     for c in team:
         if c.is_alive():
             print(f"{c.name} : {c.current_hp}/{c.max_hp} attaque {monster.name}")
             c.attack_target(monster)
+
+def print_team_status(team):
+    print("\nÉtat de l'équipe:")
+    for c in team:
+        if c.is_alive():
+            print(f"  {c.name}: {c.current_hp}/{c.max_hp} points de vie")
+
+def combat_turn(team : list[Character], monster : Monster):
+    print("\nTour de combat")
+    print_monster_status(monster)
+
+    team_attacks_monster(team, monster)
 
     if not monster.is_alive():
         print("Le monstre a ete vaincu")
@@ -19,11 +31,7 @@ def combat_turn(team : list[Character], monster : Monster):
     if not selected_c.is_alive():
         print(f"{selected_c.name} a ete vaincu")
 
-    print("\nÉtat de l'équipe:")
-    for c in team:
-        if c.is_alive():
-            print(f"  {c.name}: {c.current_hp}/{c.max_hp} points de vie")
-
+    print_team_status(team)
     return False
 
 def monster_fight_character(monster : Monster, team : list[Character]):
