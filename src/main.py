@@ -38,7 +38,7 @@ def select_team(db):
 
     while len(team) < TEAM_SIZE:
         display_characters(characters)
-        print(MSG_TEAM_CURRENT.format(team=[c.name for c in team]))
+        print(MSG_TEAM_CURRENT.format(team=[character.name for character in team]))
 
         choice = get_character_choice_input(len(team) + 1)
         try_add_character_to_team(characters, team, choice)

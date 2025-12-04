@@ -31,20 +31,21 @@ def ask_ability_usage(character):
         return False
 
     response = input(MSG_ABILITY_PROMPT.format(name=character.name, ability=character.ability_name)).lower()
-    return response == 'o'
+    return response in ABILITY_CONFIRM_INPUTS
 
 def reduce_team_cooldowns(team):
-    for_each_alive_member(team, lambda c: c.reduce_cooldown())
+    for_each_alive_member(team, lambda character: character.reduce_cooldown())
 
 def handle_abilities(team, monster):
-    for c in team:
-        if c.is_alive() and ask_ability_usage(c):
-            execute_ability(c, team, monster)
+    # we use manual loop instead of for_each_alive_member to allow early return when monster dies
+    for character in team:
+        if character.is_alive() and ask_ability_usage(character):
+            execute_ability(character, team, monster)
             if not monster.is_alive():
                 return True
     return False
 
-def check_monster_defeated(monster):
+def announce_if_monster_defeated(monster):
     if not monster.is_alive():
         print(MSG_MONSTER_DEFEATED)
         return True
@@ -52,15 +53,15 @@ def check_monster_defeated(monster):
 
 def execute_player_turn(team, monster):
     if handle_abilities(team, monster):
-        return check_monster_defeated(monster)
+        return announce_if_monster_defeated(monster)
 
     team_attacks_monster(team, monster)
-    return check_monster_defeated(monster)
+    return announce_if_monster_defeated(monster)
 
 def execute_monster_turn(monster, team):
-    selected_c = monster_fight_character(monster, team)
-    if not selected_c.is_alive():
-        print(MSG_CHARACTER_DEFEATED.format(name=selected_c.name))
+    target_character = monster_fight_character(monster, team)
+    if not target_character.is_alive():
+        print(MSG_CHARACTER_DEFEATED.format(name=target_character.name))
 
 def combat_turn(team : list[Character], monster : Monster):
     print(MSG_COMBAT_TURN)
@@ -81,10 +82,10 @@ def print_monster_attack(monster, character, is_crit):
     print(MSG_MONSTER_ATTACK.format(name=monster.name, target=character.name, current_hp=character.current_hp, max_hp=character.max_hp, crit=crit_text))
 
 def monster_fight_character(monster : Monster, team : list[Character]):
-    c = select_random_target(team)
-    is_crit = monster.attack_target(c)
-    print_monster_attack(monster, c, is_crit)
-    return c
+    target = select_random_target(team)
+    is_crit = monster.attack_target(target)
+    print_monster_attack(monster, target, is_crit)
+    return target
 
 def fight_monster(team, monster):
     while monster.is_alive() and is_team_alive(team):

@@ -43,3 +43,6 @@ DB_COLLECTION_LEADERBOARD = "leaderboard"
 
 # leaderboard
 LEADERBOARD_DEFAULT_LIMIT = 5
+
+# input validation
+ABILITY_CONFIRM_INPUTS = ['o', 'y', 'oui', 'yes']  # Valid inputs to confirm ability usage

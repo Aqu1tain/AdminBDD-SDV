@@ -7,8 +7,8 @@ def apply_damage_ability(character, monster, multiplier, message_template):
     print(message_template.format(name=character.name, damage=int(damage)))
 
 def cri_de_guerre(character, team, monster):
-    def buff_attack(c):
-        c.attack += ABILITY_CRI_GUERRE_BUFF
+    def buff_attack(char):
+        char.attack += ABILITY_CRI_GUERRE_BUFF
 
     for_each_alive_member(team, buff_attack)
     print(MSG_ABILITY_CRI_GUERRE.format(name=character.name))
@@ -24,7 +24,7 @@ def esquive(character, team, monster):
     print(MSG_ABILITY_ESQUIVE.format(name=character.name))
 
 def soin_divin(character, team, monster):
-    lowest_hp_char = min((c for c in team if c.is_alive()), key=lambda c: c.current_hp)
+    lowest_hp_char = min((char for char in team if char.is_alive()), key=lambda char: char.current_hp)
     lowest_hp_char.current_hp = min(lowest_hp_char.max_hp, lowest_hp_char.current_hp + ABILITY_SOIN_DIVIN_HEAL)
     print(MSG_ABILITY_SOIN_DIVIN.format(name=character.name, target=lowest_hp_char.name, heal=ABILITY_SOIN_DIVIN_HEAL))
 
@@ -32,8 +32,8 @@ def eclair(character, team, monster):
     apply_damage_ability(character, monster, ABILITY_ECLAIR_MULTIPLIER, MSG_ABILITY_ECLAIR)
 
 def bouclier(character, team, monster):
-    def buff_defense(c):
-        c.defense += ABILITY_BOUCLIER_BUFF
+    def buff_defense(char):
+        char.defense += ABILITY_BOUCLIER_BUFF
 
     for_each_alive_member(team, buff_defense)
     print(MSG_ABILITY_BOUCLIER.format(name=character.name))
