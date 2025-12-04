@@ -40,28 +40,35 @@ def handle_abilities(team, monster):
                 return True
     return False
 
+def end_turn_cleanup(team):
+    reduce_team_cooldowns(team)
+    print_team_status(team)
+
+def check_monster_defeated(monster):
+    if not monster.is_alive():
+        print("Le monstre a ete vaincu")
+        return True
+    return False
+
 def combat_turn(team : list[Character], monster : Monster):
     print("\nTour de combat")
     print_monster_status(monster)
 
-    if handle_abilities(team, monster):
-        print("Le monstre a ete vaincu")
-        reduce_team_cooldowns(team)
+    if handle_abilities(team, monster) and check_monster_defeated(monster):
+        end_turn_cleanup(team)
         return True
 
     team_attacks_monster(team, monster)
 
-    if not monster.is_alive():
-        print("Le monstre a ete vaincu")
-        reduce_team_cooldowns(team)
+    if check_monster_defeated(monster):
+        end_turn_cleanup(team)
         return True
 
     selected_c = monster_fight_character(monster, team)
     if not selected_c.is_alive():
         print(f"{selected_c.name} a ete vaincu")
 
-    print_team_status(team)
-    reduce_team_cooldowns(team)
+    end_turn_cleanup(team)
     return False
 
 def monster_fight_character(monster : Monster, team : list[Character]):
