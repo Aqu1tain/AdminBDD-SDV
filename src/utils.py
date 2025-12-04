@@ -21,7 +21,8 @@ def get_top_scores(db, limit=LEADERBOARD_DEFAULT_LIMIT):
     return list(db.leaderboard.find().sort("score", -1).limit(limit))
 
 def select_random_target(team):
-    return random.choice(team)
+    alive_members = [char for char in team if char.is_alive()]
+    return random.choice(alive_members)
 
 def is_team_alive(team):
     return any(char.is_alive() for char in team)
