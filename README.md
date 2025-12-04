@@ -45,12 +45,14 @@ I wont explain here how the game flows, that's up to you to discover.
 ## Project Structure
 ```
 src/
-- main.py      # entry point and menu
-- models.py    # entity, Character, Monster classes
-- game.py      # combat logic and wave system
-- abilities.py # special ability implementations
-- utils.py     # helper functions
-- db_init.py   # database initialization
+- constants/config.py    # game balance and settings
+- constants/messages.py  # all UI text strings
+- main.py                # entry point and menu
+- models.py              # Entity, Character, Monster classes
+- game.py                # combat logic and wave system
+- abilities.py           # special ability implementations
+- utils.py               # helper functions
+- db_init.py             # database initialization
 ```
 
 ## Development
