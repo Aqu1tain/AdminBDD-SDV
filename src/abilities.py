@@ -7,7 +7,10 @@ def apply_damage_ability(character, monster, multiplier, message_template):
     print(message_template.format(name=character.name, damage=int(damage)))
 
 def cri_de_guerre(character, team, monster):
-    for_each_alive_member(team, lambda c: setattr(c, 'attack', c.attack + ABILITY_CRI_GUERRE_BUFF))
+    def buff_attack(c):
+        c.attack += ABILITY_CRI_GUERRE_BUFF
+
+    for_each_alive_member(team, buff_attack)
     print(MSG_ABILITY_CRI_GUERRE.format(name=character.name))
 
 def boule_de_feu(character, team, monster):
@@ -29,7 +32,10 @@ def eclair(character, team, monster):
     apply_damage_ability(character, monster, ABILITY_ECLAIR_MULTIPLIER, MSG_ABILITY_ECLAIR)
 
 def bouclier(character, team, monster):
-    for_each_alive_member(team, lambda c: setattr(c, 'defense', c.defense + ABILITY_BOUCLIER_BUFF))
+    def buff_defense(c):
+        c.defense += ABILITY_BOUCLIER_BUFF
+
+    for_each_alive_member(team, buff_defense)
     print(MSG_ABILITY_BOUCLIER.format(name=character.name))
 
 def meditation(character, team, monster):
