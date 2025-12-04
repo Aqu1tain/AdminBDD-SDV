@@ -1,22 +1,20 @@
 from constants import *
+from utils import for_each_alive_member
+
+def apply_damage_ability(character, monster, multiplier, message_template):
+    damage = character.attack * multiplier
+    monster.take_damage(damage)
+    print(message_template.format(name=character.name, damage=int(damage)))
 
 def cri_de_guerre(character, team, monster):
-    for c in team:
-        if not c.is_alive():
-            continue
-
-        c.attack += ABILITY_CRI_GUERRE_BUFF
+    for_each_alive_member(team, lambda c: setattr(c, 'attack', c.attack + ABILITY_CRI_GUERRE_BUFF))
     print(MSG_ABILITY_CRI_GUERRE.format(name=character.name))
 
 def boule_de_feu(character, team, monster):
-    damage = character.attack * ABILITY_BOULE_FEU_MULTIPLIER
-    monster.take_damage(damage)
-    print(MSG_ABILITY_BOULE_FEU.format(name=character.name, damage=int(damage)))
+    apply_damage_ability(character, monster, ABILITY_BOULE_FEU_MULTIPLIER, MSG_ABILITY_BOULE_FEU)
 
 def tir_precis(character, team, monster):
-    damage = character.attack * ABILITY_TIR_PRECIS_MULTIPLIER
-    monster.take_damage(damage)
-    print(MSG_ABILITY_TIR_PRECIS.format(name=character.name, damage=int(damage)))
+    apply_damage_ability(character, monster, ABILITY_TIR_PRECIS_MULTIPLIER, MSG_ABILITY_TIR_PRECIS)
 
 def esquive(character, team, monster):
     character.defense += ABILITY_ESQUIVE_BUFF
@@ -28,16 +26,10 @@ def soin_divin(character, team, monster):
     print(MSG_ABILITY_SOIN_DIVIN.format(name=character.name, target=lowest_hp_char.name, heal=ABILITY_SOIN_DIVIN_HEAL))
 
 def eclair(character, team, monster):
-    damage = character.attack * ABILITY_ECLAIR_MULTIPLIER
-    monster.take_damage(damage)
-    print(MSG_ABILITY_ECLAIR.format(name=character.name, damage=int(damage)))
+    apply_damage_ability(character, monster, ABILITY_ECLAIR_MULTIPLIER, MSG_ABILITY_ECLAIR)
 
 def bouclier(character, team, monster):
-    for c in team:
-        if not c.is_alive():
-            continue
-
-        c.defense += ABILITY_BOUCLIER_BUFF
+    for_each_alive_member(team, lambda c: setattr(c, 'defense', c.defense + ABILITY_BOUCLIER_BUFF))
     print(MSG_ABILITY_BOUCLIER.format(name=character.name))
 
 def meditation(character, team, monster):
@@ -51,9 +43,7 @@ def rage(character, team, monster):
     print(MSG_ABILITY_RAGE.format(name=character.name, damage=int(damage), self_damage=ABILITY_RAGE_SELF_DAMAGE))
 
 def piege(character, team, monster):
-    damage = character.attack * ABILITY_PIEGE_MULTIPLIER
-    monster.take_damage(damage)
-    print(MSG_ABILITY_PIEGE.format(name=character.name, damage=int(damage)))
+    apply_damage_ability(character, monster, ABILITY_PIEGE_MULTIPLIER, MSG_ABILITY_PIEGE)
 
 ABILITIES = {
     "Cri de guerre": cri_de_guerre,

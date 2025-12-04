@@ -1,5 +1,5 @@
 from models import Monster, Character
-from utils import get_random_monster, select_random_target, is_team_alive, get_cooldown_text
+from utils import get_random_monster, select_random_target, is_team_alive, get_cooldown_text, get_crit_text, for_each_alive_member
 from abilities import execute_ability
 from constants import * # bunch of text and numbers
 import random
@@ -8,16 +8,15 @@ def print_monster_status(monster):
     print(MSG_MONSTER_STATUS.format(name=monster.name, current_hp=monster.current_hp, max_hp=monster.max_hp))
 
 def print_character_attack(character, monster, is_crit):
-    crit_text = MSG_CRITICAL_HIT if is_crit else ""
+    crit_text = get_crit_text(is_crit)
     print(MSG_CHARACTER_ATTACK.format(name=character.name, current_hp=character.current_hp, max_hp=character.max_hp, target=monster.name, crit=crit_text))
 
 def team_attacks_monster(team, monster):
-    for c in team:
-        if not c.is_alive():
-            continue
+    def attack(character):
+        is_crit = character.attack_target(monster)
+        print_character_attack(character, monster, is_crit)
 
-        is_crit = c.attack_target(monster)
-        print_character_attack(c, monster, is_crit)
+    for_each_alive_member(team, attack)
 
 def print_team_member_status(character):
     cooldown_text = get_cooldown_text(character)
@@ -25,11 +24,7 @@ def print_team_member_status(character):
 
 def print_team_status(team):
     print(MSG_TEAM_STATUS)
-    for c in team:
-        if not c.is_alive():
-            continue
-
-        print_team_member_status(c)
+    for_each_alive_member(team, print_team_member_status)
 
 def ask_ability_usage(character):
     if not character.is_ability_ready():
@@ -39,11 +34,7 @@ def ask_ability_usage(character):
     return response == 'o'
 
 def reduce_team_cooldowns(team):
-    for c in team:
-        if not c.is_alive():
-            continue
-
-        c.reduce_cooldown()
+    for_each_alive_member(team, lambda c: c.reduce_cooldown())
 
 def handle_abilities(team, monster):
     for c in team:
@@ -86,7 +77,7 @@ def combat_turn(team : list[Character], monster : Monster):
     return False
 
 def print_monster_attack(monster, character, is_crit):
-    crit_text = MSG_CRITICAL_HIT if is_crit else ""
+    crit_text = get_crit_text(is_crit)
     print(MSG_MONSTER_ATTACK.format(name=monster.name, target=character.name, current_hp=character.current_hp, max_hp=character.max_hp, crit=crit_text))
 
 def monster_fight_character(monster : Monster, team : list[Character]):
@@ -112,14 +103,13 @@ def scale_monster_for_wave(monster, wave):
     monster.defense = int(monster.defense * stat_multiplier)
 
 def apply_buffs_to_team(team):
-    for c in team:
-        if not c.is_alive():
-            continue
+    def buff(character):
+        character.attack += TEAM_ATTACK_BUFF
+        character.defense += TEAM_DEFENSE_BUFF
+        character.max_hp += TEAM_HP_BUFF
+        character.current_hp = min(character.max_hp, character.current_hp + TEAM_HP_BUFF)
 
-        c.attack += TEAM_ATTACK_BUFF
-        c.defense += TEAM_DEFENSE_BUFF
-        c.max_hp += TEAM_HP_BUFF
-        c.current_hp = min(c.max_hp, c.current_hp + TEAM_HP_BUFF)
+    for_each_alive_member(team, buff)
 
 def buff_team_after_wave(team, wave):
     print(MSG_WAVE_COMPLETE.format(wave=wave))

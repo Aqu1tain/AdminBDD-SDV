@@ -30,3 +30,19 @@ def get_cooldown_text(character):
     if character.is_ability_ready():
         return MSG_ABILITY_READY.format(ability=character.ability_name)
     return MSG_ABILITY_COOLDOWN.format(ability=character.ability_name, cooldown=character.current_cooldown)
+
+def get_crit_text(is_crit):
+    return MSG_CRITICAL_HIT if is_crit else ""
+
+def get_int_input(prompt, default_on_error=None):
+    try:
+        return int(input(prompt))
+    except ValueError:
+        return default_on_error
+
+def for_each_alive_member(team, action):
+    for member in team:
+        if not member.is_alive():
+            continue
+
+        action(member)

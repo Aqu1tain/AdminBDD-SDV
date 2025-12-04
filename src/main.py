@@ -1,5 +1,5 @@
 from db_init import init_database
-from utils import get_all_characters, save_score, get_top_scores
+from utils import get_all_characters, save_score, get_top_scores, get_int_input
 from game import start_combat
 from constants import *
 
@@ -9,12 +9,7 @@ def show_main_menu():
     print(MSG_MENU_QUIT)
 
 def get_menu_choice():
-    try:
-        choice = input(MSG_MENU_CHOICE_PROMPT)
-        return int(choice)
-
-    except ValueError:
-        return -1
+    return get_int_input(MSG_MENU_CHOICE_PROMPT, default_on_error=-1)
 
 def print_character_info(index, character):
     stats = character.get_stats()
@@ -26,11 +21,7 @@ def display_characters(characters):
         print_character_info(i, char)
 
 def get_character_choice_input(position):
-    try:
-        choice = int(input(MSG_TEAM_CHOICE_PROMPT.format(num=position)))
-        return choice
-    except ValueError:
-        return None
+    return get_int_input(MSG_TEAM_CHOICE_PROMPT.format(num=position), default_on_error=None)
 
 def try_add_character_to_team(characters, team, choice):
     if choice is None or choice < 1 or choice > len(characters):
