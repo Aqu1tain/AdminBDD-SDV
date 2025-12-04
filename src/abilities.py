@@ -2,8 +2,10 @@ from constants import *
 
 def cri_de_guerre(character, team, monster):
     for c in team:
-        if c.is_alive():
-            c.attack += ABILITY_CRI_GUERRE_BUFF
+        if not c.is_alive():
+            continue
+
+        c.attack += ABILITY_CRI_GUERRE_BUFF
     print(MSG_ABILITY_CRI_GUERRE.format(name=character.name))
 
 def boule_de_feu(character, team, monster):
@@ -32,8 +34,10 @@ def eclair(character, team, monster):
 
 def bouclier(character, team, monster):
     for c in team:
-        if c.is_alive():
-            c.defense += ABILITY_BOUCLIER_BUFF
+        if not c.is_alive():
+            continue
+
+        c.defense += ABILITY_BOUCLIER_BUFF
     print(MSG_ABILITY_BOUCLIER.format(name=character.name))
 
 def meditation(character, team, monster):
@@ -66,6 +70,9 @@ ABILITIES = {
 
 def execute_ability(character, team, monster):
     ability_func = ABILITIES.get(character.ability_name)
-    if ability_func:
-        ability_func(character, team, monster)
-        character.use_ability_cooldown()
+
+    if not ability_func:
+        return
+
+    ability_func(character, team, monster)
+    character.use_ability_cooldown()

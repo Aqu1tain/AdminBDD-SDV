@@ -13,9 +13,11 @@ def print_character_attack(character, monster, is_crit):
 
 def team_attacks_monster(team, monster):
     for c in team:
-        if c.is_alive():
-            is_crit = c.attack_target(monster)
-            print_character_attack(c, monster, is_crit)
+        if not c.is_alive():
+            continue
+
+        is_crit = c.attack_target(monster)
+        print_character_attack(c, monster, is_crit)
 
 def get_cooldown_text(character):
     if character.is_ability_ready():
@@ -29,8 +31,10 @@ def print_team_member_status(character):
 def print_team_status(team):
     print(MSG_TEAM_STATUS)
     for c in team:
-        if c.is_alive():
-            print_team_member_status(c)
+        if not c.is_alive():
+            continue
+
+        print_team_member_status(c)
 
 def ask_ability_usage(character):
     if not character.is_ability_ready():
@@ -41,8 +45,10 @@ def ask_ability_usage(character):
 
 def reduce_team_cooldowns(team):
     for c in team:
-        if c.is_alive():
-            c.reduce_cooldown()
+        if not c.is_alive():
+            continue
+
+        c.reduce_cooldown()
 
 def handle_abilities(team, monster):
     for c in team:
@@ -118,11 +124,13 @@ def scale_monster_for_wave(monster, wave):
 
 def apply_buffs_to_team(team):
     for c in team:
-        if c.is_alive():
-            c.attack += TEAM_ATTACK_BUFF
-            c.defense += TEAM_DEFENSE_BUFF
-            c.max_hp += TEAM_HP_BUFF
-            c.current_hp = min(c.max_hp, c.current_hp + TEAM_HP_BUFF)
+        if not c.is_alive():
+            continue
+
+        c.attack += TEAM_ATTACK_BUFF
+        c.defense += TEAM_DEFENSE_BUFF
+        c.max_hp += TEAM_HP_BUFF
+        c.current_hp = min(c.max_hp, c.current_hp + TEAM_HP_BUFF)
 
 def buff_team_after_wave(team, wave):
     print(MSG_WAVE_COMPLETE.format(wave=wave))

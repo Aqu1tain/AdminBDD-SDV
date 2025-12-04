@@ -65,11 +65,12 @@ def insert_monsters(db):
 
 def init_leaderboard(db):
     try:
-        if "leaderboard" not in db.list_collection_names():
-            db.create_collection("leaderboard")
-            print(MSG_DB_LEADERBOARD_INIT)
-        else:
+        if "leaderboard" in db.list_collection_names():
             print(MSG_DB_LEADERBOARD_EXISTS)
+            return
+
+        db.create_collection("leaderboard")
+        print(MSG_DB_LEADERBOARD_INIT)
     except OperationFailure as e:
         raise Exception(f"Failed to initialize leaderboard: {e}")
 

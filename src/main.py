@@ -57,9 +57,10 @@ def select_team(db):
 def print_leaderboard_entries(scores):
     if len(scores) == 0:
         print(MSG_LEADERBOARD_EMPTY)
-    else:
-        for i, entry in enumerate(scores, 1):
-            print(MSG_LEADERBOARD_ENTRY.format(rank=i, username=entry['username'], score=entry['score']))
+        return
+
+    for i, entry in enumerate(scores, 1):
+        print(MSG_LEADERBOARD_ENTRY.format(rank=i, username=entry['username'], score=entry['score']))
 
 def show_leaderboard(db):
     print(MSG_LEADERBOARD_TITLE)
