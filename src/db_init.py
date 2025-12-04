@@ -1,7 +1,6 @@
 from pymongo import MongoClient
 from pymongo.errors import ConnectionFailure, OperationFailure
-from messages import *
-from config import DB_HOST, DB_PORT, DB_NAME
+from constants import *
 
 
 def connect_to_db():

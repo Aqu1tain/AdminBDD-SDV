@@ -1,5 +1,4 @@
-from messages import *
-from config import *
+from constants import *
 
 def cri_de_guerre(character, team, monster):
     for c in team:

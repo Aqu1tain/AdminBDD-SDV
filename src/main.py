@@ -1,8 +1,7 @@
 from db_init import init_database
 from utils import get_all_characters, save_score, get_top_scores
 from game import start_combat
-from messages import *
-from config import TEAM_SIZE
+from constants import *
 
 def show_main_menu():
     print(MSG_MENU_EMPTY_LINE)

@@ -1,5 +1,5 @@
 from models import Character, Monster
-from config import LEADERBOARD_DEFAULT_LIMIT
+from constants import LEADERBOARD_DEFAULT_LIMIT
 
 def get_all_characters(db):
     characters_data = list(db.characters.find())

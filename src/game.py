@@ -1,8 +1,7 @@
 from models import Monster, Character
 from utils import get_random_monster
 from abilities import execute_ability
-from messages import * # bunch of text
-from config import * # bunch of numbers
+from constants import * # bunch of text and numbers
 import random
 
 def print_monster_status(monster):

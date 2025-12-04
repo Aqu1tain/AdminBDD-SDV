@@ -1,5 +1,5 @@
 import random
-from config import DEFENSE_DAMAGE_REDUCTION
+from constants import DEFENSE_DAMAGE_REDUCTION
 
 class Entity:
     def __init__(self, name, attack, defense, hp, critical_chance=0):
