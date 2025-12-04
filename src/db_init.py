@@ -20,7 +20,7 @@ def get_characters_data():
         {"name": "Guerrier", "attack": 15, "defense": 10, "hp": 100, "critical_chance": 20, "ability_name": "Cri de guerre", "ability_cooldown": 3},
         {"name": "Mage", "attack": 20, "defense": 5, "hp": 80, "critical_chance": 10, "ability_name": "Boule de feu", "ability_cooldown": 4},
         {"name": "Archer", "attack": 18, "defense": 7, "hp": 90, "critical_chance": 25, "ability_name": "Tir precis", "ability_cooldown": 3},
-        {"name": "Voleur", "attack": 22, "defense": 8, "hp": 85, "critical_chance": 30, "ability_name": "Esquive", "ability_cooldown": 4},
+        {"name": "Voleur", "attack": 20, "defense": 8, "hp": 85, "critical_chance": 25, "ability_name": "Esquive", "ability_cooldown": 4},
         {"name": "Paladin", "attack": 14, "defense": 12, "hp": 110, "critical_chance": 15, "ability_name": "Soin divin", "ability_cooldown": 5},
         {"name": "Sorcier", "attack": 25, "defense": 3, "hp": 70, "critical_chance": 12, "ability_name": "Eclair", "ability_cooldown": 3},
         {"name": "Chevalier", "attack": 17, "defense": 15, "hp": 120, "critical_chance": 18, "ability_name": "Bouclier", "ability_cooldown": 4},
