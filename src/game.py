@@ -1,5 +1,5 @@
 from models import Monster, Character
-from utils import get_random_monster
+from utils import get_random_monster, select_random_target, is_team_alive, get_cooldown_text
 from abilities import execute_ability
 from constants import * # bunch of text and numbers
 import random
@@ -18,11 +18,6 @@ def team_attacks_monster(team, monster):
 
         is_crit = c.attack_target(monster)
         print_character_attack(c, monster, is_crit)
-
-def get_cooldown_text(character):
-    if character.is_ability_ready():
-        return MSG_ABILITY_READY.format(ability=character.ability_name)
-    return MSG_ABILITY_COOLDOWN.format(ability=character.ability_name, cooldown=character.current_cooldown)
 
 def print_team_member_status(character):
     cooldown_text = get_cooldown_text(character)
@@ -90,9 +85,6 @@ def combat_turn(team : list[Character], monster : Monster):
     print_team_status(team)
     return False
 
-def select_random_target(team):
-    return random.choice(team)
-
 def print_monster_attack(monster, character, is_crit):
     crit_text = MSG_CRITICAL_HIT if is_crit else ""
     print(MSG_MONSTER_ATTACK.format(name=monster.name, target=character.name, current_hp=character.current_hp, max_hp=character.max_hp, crit=crit_text))
@@ -102,9 +94,6 @@ def monster_fight_character(monster : Monster, team : list[Character]):
     is_crit = monster.attack_target(c)
     print_monster_attack(monster, c, is_crit)
     return c
-
-def is_team_alive(team):
-    return any(char.is_alive() for char in team)
 
 def fight_monster(team, monster):
     while monster.is_alive() and is_team_alive(team):

@@ -1,5 +1,6 @@
 from models import Character, Monster
-from constants import LEADERBOARD_DEFAULT_LIMIT
+from constants import *
+import random
 
 def get_all_characters(db):
     characters_data = list(db.characters.find())
@@ -10,7 +11,6 @@ def get_all_monsters(db):
     return [Monster.from_db(m) for m in monsters_data]
 
 def get_random_monster(db):
-    import random
     monster_data = random.choice(get_all_monsters(db))
     return monster_data
 
@@ -19,3 +19,14 @@ def save_score(db, username, score):
 
 def get_top_scores(db, limit=LEADERBOARD_DEFAULT_LIMIT):
     return list(db.leaderboard.find().sort("score", -1).limit(limit))
+
+def select_random_target(team):
+    return random.choice(team)
+
+def is_team_alive(team):
+    return any(char.is_alive() for char in team)
+
+def get_cooldown_text(character):
+    if character.is_ability_ready():
+        return MSG_ABILITY_READY.format(ability=character.ability_name)
+    return MSG_ABILITY_COOLDOWN.format(ability=character.ability_name, cooldown=character.current_cooldown)
