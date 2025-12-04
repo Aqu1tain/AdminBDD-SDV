@@ -1,18 +1,19 @@
 from pymongo import MongoClient
 from pymongo.errors import ConnectionFailure, OperationFailure
+from messages import *
 
 
 def connect_to_db():
     try:
         client = MongoClient("mongodb://localhost:27017/")
-        client.admin.command("ping") # To check if connection is gud, can raise ConnectionFailure
+        client.admin.command("ping")
         db = client["game_db"]
 
-        # print("Connected to MongoDB")
+        # print(MSG_DB_CONNECT_SUCCESS)
         return db
 
     except ConnectionFailure:
-        print("Failed to connect to MongoDB.")
+        print(MSG_DB_CONNECT_FAIL)
         return None
 
 def get_characters_data():
@@ -45,10 +46,10 @@ def get_monsters_data():
 
 def insert_characters(db):
     try:
-        db.characters.drop() # We reset all changes
+        db.characters.drop()
         characters = get_characters_data()
         db.characters.insert_many(characters)
-        print(f"Inserted {len(characters)} characters")
+        print(MSG_DB_CHARS_INSERTED.format(count=len(characters)))
 
     except OperationFailure as e:
         raise Exception(f"Failed to insert characters: {e}")
@@ -58,7 +59,7 @@ def insert_monsters(db):
         db.monsters.drop()
         monsters = get_monsters_data()
         db.monsters.insert_many(monsters)
-        print(f"Inserted {len(monsters)} monsters")
+        print(MSG_DB_MONSTERS_INSERTED.format(count=len(monsters)))
 
     except OperationFailure as e:
         raise Exception(f"Failed to insert monsters: {e}")
@@ -67,9 +68,9 @@ def init_leaderboard(db):
     try:
         if "leaderboard" not in db.list_collection_names():
             db.create_collection("leaderboard")
-            print("Initialized leaderboard")
+            print(MSG_DB_LEADERBOARD_INIT)
         else:
-            print("Leaderboard already exists")
+            print(MSG_DB_LEADERBOARD_EXISTS)
     except OperationFailure as e:
         raise Exception(f"Failed to initialize leaderboard: {e}")
 

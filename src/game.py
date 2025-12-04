@@ -1,30 +1,31 @@
 from models import Monster, Character
 from utils import get_random_monster
 from abilities import execute_ability
+from messages import *
 import random
 
 def print_monster_status(monster):
-    print(f"Monstre: {monster.name} ({monster.current_hp}/{monster.max_hp} points de vie)")
+    print(MSG_MONSTER_STATUS.format(name=monster.name, current_hp=monster.current_hp, max_hp=monster.max_hp))
 
 def team_attacks_monster(team, monster):
     for c in team:
         if c.is_alive():
             is_crit = c.attack_target(monster)
-            crit_text = " COUP CRITIQUE!" if is_crit else ""
-            print(f"{c.name} : {c.current_hp}/{c.max_hp} attaque {monster.name}{crit_text}")
+            crit_text = MSG_CRITICAL_HIT if is_crit else ""
+            print(MSG_CHARACTER_ATTACK.format(name=c.name, current_hp=c.current_hp, max_hp=c.max_hp, target=monster.name, crit=crit_text))
 
 def print_team_status(team):
-    print("\nÉtat de l'équipe:")
+    print(MSG_TEAM_STATUS)
     for c in team:
         if c.is_alive():
-            cooldown_text = f" [{c.ability_name}: pret]" if c.is_ability_ready() else f" [{c.ability_name}: {c.current_cooldown} tours]"
-            print(f"  {c.name}: {c.current_hp}/{c.max_hp} HP{cooldown_text}")
+            cooldown_text = MSG_ABILITY_READY.format(ability=c.ability_name) if c.is_ability_ready() else MSG_ABILITY_COOLDOWN.format(ability=c.ability_name, cooldown=c.current_cooldown)
+            print(MSG_TEAM_MEMBER_STATUS.format(name=c.name, current_hp=c.current_hp, max_hp=c.max_hp, cooldown=cooldown_text))
 
 def ask_ability_usage(character):
     if not character.is_ability_ready():
         return False
 
-    response = input(f"{character.name} peut utiliser {character.ability_name}. Utiliser? (o/n): ").lower()
+    response = input(MSG_ABILITY_PROMPT.format(name=character.name, ability=character.ability_name)).lower()
     return response == 'o'
 
 def reduce_team_cooldowns(team):
@@ -46,12 +47,12 @@ def end_turn_cleanup(team):
 
 def check_monster_defeated(monster):
     if not monster.is_alive():
-        print("Le monstre a ete vaincu")
+        print(MSG_MONSTER_DEFEATED)
         return True
     return False
 
 def combat_turn(team : list[Character], monster : Monster):
-    print("\nTour de combat")
+    print(MSG_COMBAT_TURN)
     print_monster_status(monster)
 
     if handle_abilities(team, monster) and check_monster_defeated(monster):
@@ -66,7 +67,7 @@ def combat_turn(team : list[Character], monster : Monster):
 
     selected_c = monster_fight_character(monster, team)
     if not selected_c.is_alive():
-        print(f"{selected_c.name} a ete vaincu")
+        print(MSG_CHARACTER_DEFEATED.format(name=selected_c.name))
 
     end_turn_cleanup(team)
     return False
@@ -74,8 +75,8 @@ def combat_turn(team : list[Character], monster : Monster):
 def monster_fight_character(monster : Monster, team : list[Character]):
     c = random.choice(team)
     is_crit = monster.attack_target(c)
-    crit_text = " COUP CRITIQUE!" if is_crit else ""
-    print(f"Monstre : {monster.name} attaque {c.name} ({c.current_hp}/{c.max_hp} points de vie){crit_text}")
+    crit_text = MSG_CRITICAL_HIT if is_crit else ""
+    print(MSG_MONSTER_ATTACK.format(name=monster.name, target=c.name, current_hp=c.current_hp, max_hp=c.max_hp, crit=crit_text))
     return c
 
 def is_team_alive(team):
@@ -98,14 +99,14 @@ def scale_monster_for_wave(monster, wave):
     monster.defense = int(monster.defense * stat_multiplier)
 
 def buff_team_after_wave(team, wave):
-    print(f"\nVague {wave} terminee! L'equipe devient plus forte!")
+    print(MSG_WAVE_COMPLETE.format(wave=wave))
     for c in team:
         if c.is_alive():
             c.attack += 3
             c.defense += 2
             c.max_hp += 5
             c.current_hp = min(c.max_hp, c.current_hp + 5)
-    print("Equipe: +3 attaque, +2 defense, +5 HP max")
+    print(MSG_TEAM_BUFF)
 
 def start_combat(team : list[Character], db):
     wave = 0
@@ -114,7 +115,7 @@ def start_combat(team : list[Character], db):
         wave += 1
         monster = get_random_monster(db)
         scale_monster_for_wave(monster, wave)
-        print(f"\nVague {wave} - {monster.name} apparait!")
+        print(MSG_WAVE_START.format(wave=wave, monster=monster.name))
 
         if not fight_monster(team, monster):
             break

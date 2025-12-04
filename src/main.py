@@ -1,27 +1,28 @@
 from db_init import init_database
 from utils import get_all_characters, save_score, get_top_scores
 from game import start_combat
+from messages import *
 
 def show_main_menu():
-    print("")
-    print("1. démarrer le jeu")
-    print("2. afficher le classement")
-    print("3. quitter")
+    print(MSG_MENU_EMPTY_LINE)
+    print(MSG_MENU_START_GAME)
+    print(MSG_MENU_LEADERBOARD)
+    print(MSG_MENU_QUIT)
 
 def get_menu_choice():
     try:
-        choice = input("\nChoix: ")
+        choice = input(MSG_MENU_CHOICE_PROMPT)
         return int(choice)
 
     except ValueError:
         return -1
 
 def display_characters(characters):
-    print("\nPersonnages disponibles:")
+    print(MSG_CHAR_AVAILABLE)
 
     for i, char in enumerate(characters, 1):
         stats = char.get_stats()
-        print(f"{i}. {stats['name']} - {stats['attack']} d'attaque, {stats['defense']} de défense, {stats['max_hp']} points de vie")
+        print(MSG_CHAR_STATS.format(num=i, name=stats['name'], attack=stats['attack'], defense=stats['defense'], hp=stats['max_hp']))
 
 def select_team(db):
     characters = get_all_characters(db)
@@ -29,10 +30,10 @@ def select_team(db):
     team = []
     while len(team) < 3:
         display_characters(characters)
-        print(f"\nTeam: {[c.name for c in team]}")
+        print(MSG_TEAM_CURRENT.format(team=[c.name for c in team]))
 
         try:
-            choice = int(input(f"Choisir personnage {len(team) + 1}: "))
+            choice = int(input(MSG_TEAM_CHOICE_PROMPT.format(num=len(team) + 1)))
 
             if 1 <= choice <= len(characters):
                 selected = characters.pop(choice - 1)
@@ -41,27 +42,27 @@ def select_team(db):
                 raise ValueError
 
         except (ValueError, IndexError):
-            print("Choix invalide")
+            print(MSG_MENU_INVALID_CHOICE)
 
     return team
 
 def show_leaderboard(db):
-    print("\nMeilleurs scores:")
+    print(MSG_LEADERBOARD_TITLE)
     scores = get_top_scores(db)
 
     if len(scores) == 0:
-        print("Aucun score dans la db")
+        print(MSG_LEADERBOARD_EMPTY)
     else:
         for i, entry in enumerate(scores, 1):
-            print(f"{i}. {entry['username']} a survécu à {entry['score']} vagues")
+            print(MSG_LEADERBOARD_ENTRY.format(rank=i, username=entry['username'], score=entry['score']))
 
 def start_game(db):
-    username = input("\nNom d'utilisateur: ") # TODO : Escape this
+    username = input(MSG_USERNAME_PROMPT)
     team = select_team(db)
 
-    print(f"\nTeam de {username}:")
+    print(MSG_TEAM_FINAL.format(username=username))
     for char in team:
-        print(f"- {char.name}")
+        print(MSG_TEAM_MEMBER.format(name=char.name))
 
     score = start_combat(team, db)
     save_score(db, username, score)
@@ -79,13 +80,13 @@ def main():
             elif choice == 2:
                 show_leaderboard(db)
             elif choice == 3:
-                print("Babaye")
+                print(MSG_MENU_GOODBYE)
                 break
             else:
-                print("Choix invalide") # If -1 returned, that checks
+                print(MSG_MENU_INVALID_CHOICE)
 
     else:
-        print("Pas de Db")
+        print(MSG_DB_NO_CONNECTION)
 
 if __name__ == "__main__":
     main()
