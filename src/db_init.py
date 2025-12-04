@@ -1,13 +1,14 @@
 from pymongo import MongoClient
 from pymongo.errors import ConnectionFailure, OperationFailure
 from messages import *
+from config import DB_HOST, DB_PORT, DB_NAME
 
 
 def connect_to_db():
     try:
-        client = MongoClient("mongodb://localhost:27017/")
+        client = MongoClient(f"mongodb://{DB_HOST}:{DB_PORT}/")
         client.admin.command("ping")
-        db = client["game_db"]
+        db = client[DB_NAME]
 
         # print(MSG_DB_CONNECT_SUCCESS)
         return db

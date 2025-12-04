@@ -1,4 +1,5 @@
 from models import Character, Monster
+from config import LEADERBOARD_DEFAULT_LIMIT
 
 def get_all_characters(db):
     characters_data = list(db.characters.find())
@@ -9,12 +10,12 @@ def get_all_monsters(db):
     return [Monster.from_db(m) for m in monsters_data]
 
 def get_random_monster(db):
-    import random # Inline cuz imported from external file
+    import random
     monster_data = random.choice(get_all_monsters(db))
     return monster_data
 
 def save_score(db, username, score):
     db.leaderboard.insert_one({"username": username, "score": score})
 
-def get_top_scores(db, limit=5):
-    return list(db.leaderboard.find().sort("score", -1).limit(limit)) # -1 -> Descending order
+def get_top_scores(db, limit=LEADERBOARD_DEFAULT_LIMIT):
+    return list(db.leaderboard.find().sort("score", -1).limit(limit))

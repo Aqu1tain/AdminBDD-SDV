@@ -1,7 +1,8 @@
 from models import Monster, Character
 from utils import get_random_monster
 from abilities import execute_ability
-from messages import *
+from messages import * # bunch of text
+from config import * # bunch of numbers
 import random
 
 def print_monster_status(monster):
@@ -90,8 +91,8 @@ def fight_monster(team, monster):
     return is_team_alive(team)
 
 def scale_monster_for_wave(monster, wave):
-    hp_multiplier = 1 + (wave - 1) * 0.15
-    stat_multiplier = 1 + (wave - 1) * 0.10
+    hp_multiplier = 1 + (wave - 1) * WAVE_HP_MULTIPLIER
+    stat_multiplier = 1 + (wave - 1) * WAVE_STAT_MULTIPLIER
 
     monster.max_hp = int(monster.max_hp * hp_multiplier)
     monster.current_hp = monster.max_hp
@@ -102,10 +103,10 @@ def buff_team_after_wave(team, wave):
     print(MSG_WAVE_COMPLETE.format(wave=wave))
     for c in team:
         if c.is_alive():
-            c.attack += 3
-            c.defense += 2
-            c.max_hp += 5
-            c.current_hp = min(c.max_hp, c.current_hp + 5)
+            c.attack += TEAM_ATTACK_BUFF
+            c.defense += TEAM_DEFENSE_BUFF
+            c.max_hp += TEAM_HP_BUFF
+            c.current_hp = min(c.max_hp, c.current_hp + TEAM_HP_BUFF)
     print(MSG_TEAM_BUFF)
 
 def start_combat(team : list[Character], db):

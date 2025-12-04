@@ -1,4 +1,5 @@
 import random
+from config import DEFENSE_DAMAGE_REDUCTION
 
 class Entity:
     def __init__(self, name, attack, defense, hp, critical_chance=0):
@@ -23,7 +24,7 @@ class Entity:
         return self.current_hp > 0
 
     def take_damage(self, damage):
-        actual_damage = max(0, damage - self.defense / 2)
+        actual_damage = max(0, damage - self.defense / DEFENSE_DAMAGE_REDUCTION)
         self.current_hp = max(0, self.current_hp - actual_damage)
 
     def attack_target(self, target):

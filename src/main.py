@@ -2,6 +2,7 @@ from db_init import init_database
 from utils import get_all_characters, save_score, get_top_scores
 from game import start_combat
 from messages import *
+from config import TEAM_SIZE
 
 def show_main_menu():
     print(MSG_MENU_EMPTY_LINE)
@@ -28,7 +29,7 @@ def select_team(db):
     characters = get_all_characters(db)
 
     team = []
-    while len(team) < 3:
+    while len(team) < TEAM_SIZE:
         display_characters(characters)
         print(MSG_TEAM_CURRENT.format(team=[c.name for c in team]))
 
