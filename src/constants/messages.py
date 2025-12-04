@@ -30,8 +30,7 @@ MSG_WAVE_COMPLETE = "\nVague {wave} terminee! L'equipe devient plus forte!"
 MSG_TEAM_BUFF = "Equipe: +3 attaque, +2 defense, +5 HP max"
 
 # menu related messages
-MSG_MENU_EMPTY_LINE = ""
-MSG_MENU_START_GAME = "1. démarrer le jeu"
+MSG_MENU_START_GAME = "\n1. démarrer le jeu"
 MSG_MENU_LEADERBOARD = "2. afficher le classement"
 MSG_MENU_QUIT = "3. quitter"
 MSG_MENU_CHOICE_PROMPT = "\nChoix: "

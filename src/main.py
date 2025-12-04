@@ -4,7 +4,6 @@ from game import start_combat
 from constants import *
 
 def show_main_menu():
-    print(MSG_MENU_EMPTY_LINE)
     print(MSG_MENU_START_GAME)
     print(MSG_MENU_LEADERBOARD)
     print(MSG_MENU_QUIT)

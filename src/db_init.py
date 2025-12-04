@@ -2,14 +2,13 @@ from pymongo import MongoClient
 from pymongo.errors import ConnectionFailure, OperationFailure
 from constants import *
 
-
 def connect_to_db():
     try:
         client = MongoClient(f"mongodb://{DB_HOST}:{DB_PORT}/")
         client.admin.command("ping")
         db = client[DB_NAME]
 
-        # print(MSG_DB_CONNECT_SUCCESS)
+        print(MSG_DB_CONNECT_SUCCESS)
         return db
 
     except ConnectionFailure:

@@ -1,6 +1,6 @@
 # Config file for the game
 # Feel free to change the values to match your ideal vision of what fun is.
-# Anyways, if you fun is to move around some values, you *should* question yourself XD
+# Anyway, if your fun is to move around some values, you *should* question yourself XD
 
 # team
 TEAM_SIZE = 3
@@ -15,7 +15,7 @@ TEAM_DEFENSE_BUFF = 2
 TEAM_HP_BUFF = 5
 
 # combat
-DEFENSE_DAMAGE_REDUCTION = 2  # damages reduced by defense / DEFENSE_DAMAGE_REDUCTION
+DEFENSE_DAMAGE_REDUCTION = 2  # damages reduced by (defense / DEFENSE_DAMAGE_REDUCTION)
 
 # abilities stuff
 ABILITY_BOULE_FEU_MULTIPLIER = 2.0
