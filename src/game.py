@@ -1,5 +1,6 @@
 from models import Monster, Character
 from utils import get_random_monster
+from abilities import execute_ability
 import random
 
 def print_monster_status(monster):
@@ -16,16 +17,43 @@ def print_team_status(team):
     print("\nÉtat de l'équipe:")
     for c in team:
         if c.is_alive():
-            print(f"  {c.name}: {c.current_hp}/{c.max_hp} points de vie")
+            cooldown_text = f" [{c.ability_name}: pret]" if c.is_ability_ready() else f" [{c.ability_name}: {c.current_cooldown} tours]"
+            print(f"  {c.name}: {c.current_hp}/{c.max_hp} HP{cooldown_text}")
+
+def ask_ability_usage(character):
+    if not character.is_ability_ready():
+        return False
+
+    response = input(f"{character.name} peut utiliser {character.ability_name}. Utiliser? (o/n): ").lower()
+    return response == 'o'
+
+def reduce_team_cooldowns(team):
+    for c in team:
+        if c.is_alive():
+            c.reduce_cooldown()
+
+def handle_abilities(team, monster):
+    for c in team:
+        if c.is_alive() and ask_ability_usage(c):
+            execute_ability(c, team, monster)
+            if not monster.is_alive():
+                return True
+    return False
 
 def combat_turn(team : list[Character], monster : Monster):
     print("\nTour de combat")
     print_monster_status(monster)
 
+    if handle_abilities(team, monster):
+        print("Le monstre a ete vaincu")
+        reduce_team_cooldowns(team)
+        return True
+
     team_attacks_monster(team, monster)
 
     if not monster.is_alive():
         print("Le monstre a ete vaincu")
+        reduce_team_cooldowns(team)
         return True
 
     selected_c = monster_fight_character(monster, team)
@@ -33,6 +61,7 @@ def combat_turn(team : list[Character], monster : Monster):
         print(f"{selected_c.name} a ete vaincu")
 
     print_team_status(team)
+    reduce_team_cooldowns(team)
     return False
 
 def monster_fight_character(monster : Monster, team : list[Character]):

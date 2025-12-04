@@ -49,7 +49,33 @@ class Entity:
 # In the future, there may be custom methods depending on the class
 # But for now they are strictly the same.
 class Character(Entity):
-    pass
+    def __init__(self, name, attack, defense, hp, critical_chance=0, ability_name="", ability_cooldown=0):
+        super().__init__(name, attack, defense, hp, critical_chance)
+        self.ability_name = ability_name
+        self.ability_cooldown = ability_cooldown
+        self.current_cooldown = 0
+
+    @classmethod
+    def from_db(cls, data):
+        return cls(
+            data['name'],
+            data['attack'],
+            data['defense'],
+            data['hp'],
+            data.get('critical_chance', 0),
+            data.get('ability_name', ''),
+            data.get('ability_cooldown', 0)
+        )
+
+    def is_ability_ready(self):
+        return self.current_cooldown == 0
+
+    def use_ability_cooldown(self):
+        self.current_cooldown = self.ability_cooldown
+
+    def reduce_cooldown(self):
+        if self.current_cooldown > 0:
+            self.current_cooldown -= 1
 
 class Monster(Entity):
     pass
