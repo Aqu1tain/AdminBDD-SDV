@@ -88,15 +88,37 @@ def fight_monster(team, monster):
 
     return is_team_alive(team)
 
+def scale_monster_for_wave(monster, wave):
+    hp_multiplier = 1 + (wave - 1) * 0.15
+    stat_multiplier = 1 + (wave - 1) * 0.10
+
+    monster.max_hp = int(monster.max_hp * hp_multiplier)
+    monster.current_hp = monster.max_hp
+    monster.attack = int(monster.attack * stat_multiplier)
+    monster.defense = int(monster.defense * stat_multiplier)
+
+def buff_team_after_wave(team, wave):
+    print(f"\nVague {wave} terminee! L'equipe devient plus forte!")
+    for c in team:
+        if c.is_alive():
+            c.attack += 3
+            c.defense += 2
+            c.max_hp += 5
+            c.current_hp = min(c.max_hp, c.current_hp + 5)
+    print("Equipe: +3 attaque, +2 defense, +5 HP max")
+
 def start_combat(team : list[Character], db):
     wave = 0
 
     while is_team_alive(team):
         wave += 1
         monster = get_random_monster(db)
+        scale_monster_for_wave(monster, wave)
         print(f"\nVague {wave} - {monster.name} apparait!")
 
         if not fight_monster(team, monster):
             break
+
+        buff_team_after_wave(team, wave)
 
     return wave - 1 if wave > 0 else 0
